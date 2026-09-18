@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: trove
+      POSTGRES_PASSWORD: trove
+      POSTGRES_DB: trove
+    volumes:
+      - trove_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  trove:
+    build: .
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    # Optional: restart policy for production
+    restart: unless-stopped
+
+volumes:
+  trove_data:
+
